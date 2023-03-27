@@ -1,0 +1,24 @@
+{
+	"name": "DS_stateAbreviationParquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LNK_ETLinAzure",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Varios"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": "destParq",
+				"container": "cookbookdestino"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

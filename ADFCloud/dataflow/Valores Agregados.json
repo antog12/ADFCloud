@@ -1,0 +1,127 @@
+{
+	"name": "Valores Agregados",
+	"properties": {
+		"folder": {
+			"name": "SSIS"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CdD_SSIS_DB",
+						"type": "DatasetReference"
+					},
+					"name": "OrigenFifa"
+				},
+				{
+					"dataset": {
+						"referenceName": "CdD_SSIS_DB",
+						"type": "DatasetReference"
+					},
+					"name": "OrigenFifa2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "destino_promedio",
+						"type": "DatasetReference"
+					},
+					"name": "destinoPromedios"
+				},
+				{
+					"dataset": {
+						"referenceName": "destino_jugadoresPornacionalidad",
+						"type": "DatasetReference"
+					},
+					"name": "DestinoJugadoresPornacionalidad"
+				}
+			],
+			"transformations": [
+				{
+					"name": "PromedioPeso"
+				},
+				{
+					"name": "numJugadoresPorPaiises"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          Nombre as string,",
+				"          NombreCompleto as string,",
+				"          Club as string,",
+				"          Liga as string,",
+				"          FechaNacimiento as date,",
+				"          AlturaCM as integer,",
+				"          PesoKG as integer,",
+				"          Nacionalidad as string,",
+				"          ValorEuropa as double,",
+				"          PiePreferido as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> OrigenFifa",
+				"source(output(",
+				"          ID as integer,",
+				"          Nombre as string,",
+				"          NombreCompleto as string,",
+				"          Club as string,",
+				"          Liga as string,",
+				"          FechaNacimiento as date,",
+				"          AlturaCM as integer,",
+				"          PesoKG as integer,",
+				"          Nacionalidad as string,",
+				"          ValorEuropa as double,",
+				"          PiePreferido as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> OrigenFifa2",
+				"OrigenFifa aggregate(groupBy(PiePreferido),",
+				"     PesoKG = avg(PesoKG)) ~> PromedioPeso",
+				"OrigenFifa2 aggregate(groupBy(Nacionalidad),",
+				"     ID = count(ID)) ~> numJugadoresPorPaiises",
+				"PromedioPeso sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          PiePref as string,",
+				"          PromedioPesoKG as double",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          PiePref = PiePreferido,",
+				"          PromedioPesoKG = PesoKG",
+				"     )) ~> destinoPromedios",
+				"numJugadoresPorPaiises sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Nacionalidad as string,",
+				"          CantidadJugadores as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          Nacionalidad,",
+				"          CantidadJugadores = ID",
+				"     )) ~> DestinoJugadoresPornacionalidad"
+			]
+		}
+	}
+}

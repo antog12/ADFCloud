@@ -1,0 +1,110 @@
+{
+	"name": "DFT_StateIncomeMappingDataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_stateAbreviationParquet",
+						"type": "DatasetReference"
+					},
+					"name": "StateAbreviation"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_incomeDataParquet",
+						"type": "DatasetReference"
+					},
+					"name": "StateincomeData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_SalesIncomesPerStates",
+						"type": "DatasetReference"
+					},
+					"name": "SinkSalesLT"
+				}
+			],
+			"transformations": [
+				{
+					"name": "LKPStateAbbreviation"
+				},
+				{
+					"name": "DERStateIncomePipelineRunID"
+				},
+				{
+					"name": "SELRemoveUnosedColumns"
+				},
+				{
+					"name": "AGGStateIncome"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     PipelineRunID as string (\"No parameter value\")",
+				"}",
+				"source(output(",
+				"          abbreviation as string,",
+				"          StateName as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> StateAbreviation",
+				"source(output(",
+				"          STATE as string,",
+				"          A02650 as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> StateincomeData",
+				"StateincomeData, StateAbreviation lookup(STATE == abbreviation,",
+				"     multiple: false,",
+				"     pickup: 'first',",
+				"     asc(StateName, true),",
+				"     broadcast: 'right')~> LKPStateAbbreviation",
+				"LKPStateAbbreviation derive(StateIncome = toLong(A02650),",
+				"          PipeLineRunID = $PipelineRunID) ~> DERStateIncomePipelineRunID",
+				"DERStateIncomePipelineRunID select(mapColumn(",
+				"          abbreviation,",
+				"          StateName,",
+				"          StateIncome,",
+				"          PipeLineRunID",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SELRemoveUnosedColumns",
+				"SELRemoveUnosedColumns aggregate(groupBy(abbreviation,",
+				"          StateName,",
+				"          PipeLineRunID),",
+				"     StateIncome = sum(StateIncome)) ~> AGGStateIncome",
+				"AGGStateIncome sink(allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     input(",
+				"          StateAbbreviation as string,",
+				"          Statename as string,",
+				"          StateIncome as long,",
+				"          BatchID as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     truncate:true,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          StateAbbreviation = abbreviation,",
+				"          Statename = StateName,",
+				"          StateIncome,",
+				"          BatchID = PipeLineRunID",
+				"     )) ~> SinkSalesLT"
+			]
+		}
+	}
+}

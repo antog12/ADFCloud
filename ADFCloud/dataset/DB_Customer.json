@@ -1,0 +1,34 @@
+{
+	"name": "DB_Customer",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdfByExampleSql",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EmpName",
+				"type": "varchar"
+			},
+			{
+				"name": "EmpAdd",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DeptName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Gender",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "CustomerDetails"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

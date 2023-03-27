@@ -1,0 +1,68 @@
+{
+	"name": "multiplerowsInsingle",
+	"properties": {
+		"description": "de varias filas a una sola",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText2",
+						"type": "DatasetReference"
+					},
+					"name": "origen"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "destinogenericoADLS",
+						"type": "LinkedServiceReference"
+					},
+					"name": "destino"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ItemId as string,",
+				"          VartId as string,",
+				"          ItemName as string,",
+				"          Vartname as string,",
+				"          WhNo as string,",
+				"          zone as string,",
+				"          Bin as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> origen",
+				"origen aggregate(groupBy(ItemId,",
+				"          ItemName),",
+				"     Vartname = collect(Vartname)) ~> aggregate1",
+				"aggregate1 derive(Vartname = replace(replace(replace(toString(Vartname),'\"',''),'[',''),']','')) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delimited',",
+				"     fileSystem: 'output',",
+				"     columnDelimiter: ',',",
+				"     escapeChar: '\\\\',",
+				"     quoteChar: '\\\"',",
+				"     columnNamesAsHeader: true,",
+				"     partitionFileNames:['ItemInfoDot.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> destino"
+			]
+		}
+	}
+}

@@ -1,0 +1,93 @@
+{
+	"name": "PieEsp",
+	"properties": {
+		"folder": {
+			"name": "SSIS"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CdD_SSIS_DB",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "FIFA_destino",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "PieEsp"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          Nombre as string,",
+				"          NombreCompleto as string,",
+				"          Club as string,",
+				"          Liga as string,",
+				"          FechaNacimiento as date,",
+				"          AlturaCM as integer,",
+				"          PesoKG as integer,",
+				"          Nacionalidad as string,",
+				"          ValorEuropa as double,",
+				"          PiePreferido as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 derive(PieEsp = case(PiePreferido =='Left','Izquierdo','Derecho')) ~> PieEsp",
+				"PieEsp sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as integer,",
+				"          Nombre as string,",
+				"          NombreCompleto as string,",
+				"          Club as string,",
+				"          Liga as string,",
+				"          FechaNacimiento as date,",
+				"          AlturaCM as integer,",
+				"          PesoKG as integer,",
+				"          Nacionalidad as string,",
+				"          ValorEuropa as double,",
+				"          PiePreferido as string,",
+				"          PieEsp as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['truncate table [dbo].[FIFA_destino]'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ID,",
+				"          Nombre,",
+				"          NombreCompleto,",
+				"          Club,",
+				"          Liga,",
+				"          FechaNacimiento,",
+				"          AlturaCM,",
+				"          PesoKG,",
+				"          Nacionalidad,",
+				"          ValorEuropa,",
+				"          PiePreferido,",
+				"          PieEsp",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

@@ -1,0 +1,112 @@
+{
+	"name": "LookUp",
+	"properties": {
+		"folder": {
+			"name": "SSIS"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CdD_SSIS_DB",
+						"type": "DatasetReference"
+					},
+					"name": "origen"
+				},
+				{
+					"dataset": {
+						"referenceName": "DB_edadJugadores",
+						"type": "DatasetReference"
+					},
+					"name": "origenedad"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DB_edadJugadores",
+						"type": "DatasetReference"
+					},
+					"name": "destino"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "exists1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          Nombre as string,",
+				"          NombreCompleto as string,",
+				"          Club as string,",
+				"          Liga as string,",
+				"          FechaNacimiento as date,",
+				"          AlturaCM as integer,",
+				"          PesoKG as integer,",
+				"          Nacionalidad as string,",
+				"          ValorEuropa as double,",
+				"          PiePreferido as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> origen",
+				"source(output(",
+				"          ID as integer,",
+				"          NombreCompleto as string,",
+				"          Edad as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> origenedad",
+				"origen select(mapColumn(",
+				"          ID,",
+				"          NombreCompleto,",
+				"          FechaNacimiento",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select",
+				"exists1 derive(Edad = minus(year(currentDate()),year(FechaNacimiento))) ~> derivedColumn1",
+				"select, select1 exists(select@ID == select1@ID,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> exists1",
+				"origenedad select(mapColumn(",
+				"          ID,",
+				"          NombreCompleto,",
+				"          Edad",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as integer,",
+				"          NombreCompleto as string,",
+				"          Edad as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['truncate table edadjugadores'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> destino"
+			]
+		}
+	}
+}

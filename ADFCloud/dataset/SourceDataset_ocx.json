@@ -1,0 +1,22 @@
+{
+	"name": "SourceDataset_ocx",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ConexionOrigeADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "azure-data-factory-by-example-main.zip",
+				"fileSystem": "master"
+			},
+			"compression": {
+				"type": "ZipDeflate"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

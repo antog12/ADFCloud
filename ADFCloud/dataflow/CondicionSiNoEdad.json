@@ -1,0 +1,102 @@
+{
+	"name": "CondicionSiNoEdad",
+	"properties": {
+		"folder": {
+			"name": "SSIS"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CdD_SSIS_DB",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "mayor1990",
+						"type": "DatasetReference"
+					},
+					"name": "mayores1990"
+				},
+				{
+					"dataset": {
+						"referenceName": "MenorOigual1990",
+						"type": "DatasetReference"
+					},
+					"name": "Menores1990"
+				}
+			],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "split1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          Nombre as string,",
+				"          NombreCompleto as string,",
+				"          Club as string,",
+				"          Liga as string,",
+				"          FechaNacimiento as date,",
+				"          AlturaCM as integer,",
+				"          PesoKG as integer,",
+				"          Nacionalidad as string,",
+				"          ValorEuropa as double,",
+				"          PiePreferido as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 select(mapColumn(",
+				"          ID,",
+				"          NombreCompleto,",
+				"          FechaNacimiento",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 split(year(FechaNacimiento) > 1990,",
+				"     disjoint: false) ~> split1@(Mayor1990, MenorOigual1990)",
+				"split1@Mayor1990 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as integer,",
+				"          NombreCompleto as string,",
+				"          FechaNacimiento as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> mayores1990",
+				"split1@MenorOigual1990 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as integer,",
+				"          NombreCompleto as string,",
+				"          FechaNacimiento as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> Menores1990"
+			]
+		}
+	}
+}

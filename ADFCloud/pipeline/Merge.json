@@ -1,0 +1,37 @@
+{
+	"name": "Merge",
+	"properties": {
+		"activities": [
+			{
+				"name": "Merged",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "Mergeando",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "SSIS_ADF"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-03-20T11:56:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

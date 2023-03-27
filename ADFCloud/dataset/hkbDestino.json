@@ -1,0 +1,124 @@
+{
+	"name": "hkbDestino",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdfByExampleSql",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "ID_HKB",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "NAME",
+				"type": "nvarchar"
+			},
+			{
+				"name": "NUMERICID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "QUALITY",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "TIMESTAMP",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "VALUE",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "FLG_ACTV",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "FECHA_INI_ACTV",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "FECHA_FIN_ACTV",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "ETL_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "CREATE_ID_WKF",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "UPDATE_ID_WKF",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "DELETE_ID_WKF",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "CREATE_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "UPDATE_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "DELETE_DATE",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "CREATE_USER",
+				"type": "nvarchar"
+			},
+			{
+				"name": "UPDATE_USER",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DELETE_USER",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MD5_CHECKSUM",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "destino_HKB"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

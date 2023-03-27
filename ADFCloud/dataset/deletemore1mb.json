@@ -1,0 +1,27 @@
+{
+	"name": "deletemore1mb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adfbyexmplesa1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"delete": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().delete",
+					"type": "Expression"
+				},
+				"container": "mas1mega"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

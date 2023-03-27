@@ -1,0 +1,25 @@
+{
+	"name": "moviedatasetdestino",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "moviesBlobstorage",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Capítulo 2"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "landing"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

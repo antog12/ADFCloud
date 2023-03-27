@@ -1,0 +1,25 @@
+{
+	"name": "SourceDataset_yj1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adfbyexmplesa1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Capítulo 2"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "azure-data-factory-by-example-main.zip",
+				"container": "landing"
+			},
+			"compression": {
+				"type": "ZipDeflate"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

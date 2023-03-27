@@ -1,0 +1,94 @@
+{
+	"name": "sendenotificationPassed",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "MessageCard",
+					"value": {
+						"value": "{\n    \"@type\": \"MessageCard\",\n    \"@context\": \"http://schema.org/extensions\",\n    \"themeColor\": \"0076D7\",\n    \"summary\": \"Pipeline status alert message​​​​\",\n    \"sections\": [\n        {\n            \"activityTitle\": \"Pipeline execution alert​​​​\",\n            \"facts\": [\n                {\n                    \"name\": \"Subscription Id:\",\n                    \"value\": \"@{pipeline().parameters.subscription}\"\n                },\n                {\n                    \"name\": \"Resource Group:\",\n                    \"value\": \"@{pipeline().parameters.resourceGroup}\"\n                },\n                {\n                    \"name\": \"Data Factory Name:\",\n                    \"value\": \"@{pipeline().DataFactory}\"\n                },\n                {\n                    \"name\": \"Pipeline RunId:\",\n                    \"value\": \"@{pipeline().parameters.runid}\"\n                },\n                {\n                    \"name\": \"Pipline Name:\",\n                    \"value\": \"@{pipeline().parameters.name}\"\n                },\n                {\n                    \"name\": \"Pipeline Status:\",\n                    \"value\": \"@{pipeline().parameters.status}\"\n                },\n                {\n                    \"name\": \"Execution Start Time (UTC):\",\n                    \"value\": \"@{pipeline().parameters.triggerTime}\"\n                },\n                {\n                    \"name\": \"Execution Finish Time (UTC):\",\n                    \"value\": \"@{pipeline().parameters.executionEndTime}\"\n                },\n                {\n                    \"name\": \"Execution Duration (s):\",\n                    \"value\": \"@{pipeline().parameters.runDuration}\"\n                },\n                {\n                    \"name\": \"Message:\",\n                    \"value\": \"@{pipeline().parameters.mesage}\"\n                },\n                {\n                    \"name\": \"Notification Time (UTC):\",\n                    \"value\": \"@{utcNow()}\"\n                }\n            ],\n            \"markdown\": true\n        }\n    ],\n    \"potentialAction\": [\n        {\n            \"@type\": \"OpenUri\",\n            \"name\": \"View pipeline run\",\n            \"targets\": [\n                {\n                    \"os\": \"default\",\n                    \"uri\": \"@{concat('https://adf.azure.com/monitoring/pipelineruns/',pipeline().parameters.runid,'?factory=/subscriptions/',pipeline().parameters.subscription,'/resourceGroups/',pipeline().parameters.resourceGroup,'/providers/Microsoft.DataFactory/factories/',pipeline().DataFactory)}\"\n                }\n            ]\n        }\n    ]\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "WebHook1",
+				"type": "WebHook",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@pipeline().parameters.teamwebhookurl",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"body": {
+						"value": "@json(variables('MessageCard'))",
+						"type": "Expression"
+					},
+					"timeout": "00:10:00"
+				}
+			}
+		],
+		"parameters": {
+			"teamwebhookurl": {
+				"type": "string",
+				"defaultValue": "https://neoris0.webhook.office.com/webhookb2/057ea739-9164-4e72-8992-1ec964f6104d@0d37204a-f51c-4187-b869-028b3934a0b0/IncomingWebhook/00368ae6a2fc43bf94578c1fed13e6e5/6f4d3196-728a-4c84-84c1-b0c47d3d5025"
+			},
+			"name": {
+				"type": "string",
+				"defaultValue": "Test"
+			},
+			"triggerTime": {
+				"type": "string"
+			},
+			"status": {
+				"type": "string",
+				"defaultValue": "Testing"
+			},
+			"mesage": {
+				"type": "string",
+				"defaultValue": "This is executed with success"
+			},
+			"subscription": {
+				"type": "string",
+				"defaultValue": "82ba3da3-c519-455e-ae32-4016e105815b"
+			},
+			"resourceGroup": {
+				"type": "string",
+				"defaultValue": "NEORIS"
+			},
+			"runid": {
+				"type": "string"
+			},
+			"executionEndTime": {
+				"type": "string"
+			},
+			"runDuration": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"MessageCard": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "ADF Engineer Interview"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-03-22T09:57:05Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

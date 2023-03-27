@@ -1,0 +1,36 @@
+{
+	"name": "DB_edadNacimientoJugadores",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LnkSSIS_DB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NombreCompleto",
+				"type": "varchar"
+			},
+			{
+				"name": "Edad",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "FechaNacimiento",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "EdadnacimientoJugadores"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

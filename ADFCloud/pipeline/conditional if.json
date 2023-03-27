@@ -1,0 +1,53 @@
+{
+	"name": "conditional if",
+	"properties": {
+		"activities": [
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(pipeline().parameters.p_file,10)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "False Wait",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "True Wait",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"p_file": {
+				"type": "int",
+				"defaultValue": 10
+			}
+		},
+		"folder": {
+			"name": "Varios"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-03-06T13:45:23Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

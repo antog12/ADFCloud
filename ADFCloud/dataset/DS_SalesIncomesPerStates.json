@@ -1,0 +1,35 @@
+{
+	"name": "DS_SalesIncomesPerStates",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdfByExampleSql",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "StateAbbreviation",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Statename",
+				"type": "nvarchar"
+			},
+			{
+				"name": "StateIncome",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "BatchID",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "IncomesPerState"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

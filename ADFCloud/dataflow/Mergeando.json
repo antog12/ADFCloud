@@ -1,0 +1,90 @@
+{
+	"name": "Mergeando",
+	"properties": {
+		"folder": {
+			"name": "SSIS"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "mayor1990",
+						"type": "DatasetReference"
+					},
+					"name": "Mayores1990"
+				},
+				{
+					"dataset": {
+						"referenceName": "MenorOigual1990",
+						"type": "DatasetReference"
+					},
+					"name": "Menores1990"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DB_fifaMerged",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "sort1"
+				},
+				{
+					"name": "sort2"
+				},
+				{
+					"name": "Combinar"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ID as integer,",
+				"          NombreCompleto as string,",
+				"          FechaNacimiento as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> Mayores1990",
+				"source(output(",
+				"          ID as integer,",
+				"          NombreCompleto as string,",
+				"          FechaNacimiento as date",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> Menores1990",
+				"Mayores1990 sort(asc(ID, true)) ~> sort1",
+				"Menores1990 sort(asc(ID, true)) ~> sort2",
+				"sort1, sort2 join(Mayores1990@ID == Menores1990@ID,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> Combinar",
+				"Combinar sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          ID as integer,",
+				"          NombreCompleto as string,",
+				"          FechaNacimiento as date",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     preSQLs:['truncate table FIFAMerged'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

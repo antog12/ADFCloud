@@ -1,0 +1,91 @@
+{
+	"name": "Condiciones de dependencia",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_dependencias",
+					"value": {
+						"value": "@string(int('not an int'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable4",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_dependencias",
+					"value": {
+						"value": "@string(10)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable3",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable2",
+						"dependencyConditions": [
+							"Skipped",
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_dependencias",
+					"value": {
+						"value": "@string(20)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable4",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "v_dependencias",
+					"value": {
+						"value": "@addhours(utcnow(),1)",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"variables": {
+			"v_dependencias": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Capítulo 6"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-03-06T10:23:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

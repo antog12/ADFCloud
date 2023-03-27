@@ -1,0 +1,32 @@
+{
+	"name": "DB_edadJugadores",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LnkSSIS_DB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NombreCompleto",
+				"type": "varchar"
+			},
+			{
+				"name": "Edad",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "edadjugadores"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

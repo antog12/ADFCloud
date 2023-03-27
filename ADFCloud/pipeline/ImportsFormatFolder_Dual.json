@@ -1,0 +1,55 @@
+{
+	"name": "ImportsFormatFolder_Dual",
+	"properties": {
+		"description": "Se ejecutará 2 veces. Una para SweetsTreats y otra para Desserts4All",
+		"activities": [
+			{
+				"name": "Import Sweet treats data",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Importsformatfolder",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"WildCardfolderPath": "azure-data-factory-by-example-main/SampleData/SweetTreats",
+						"wildCardfileName": "*.csv"
+					}
+				}
+			},
+			{
+				"name": "Import Dessert4all data",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Import Sweet treats data",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Importsformatfolder",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"WildCardfolderPath": "azure-data-factory-by-example-main/SampleData/Desserts4All",
+						"wildCardfileName": "*.csv"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Capítulo 5"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-03-03T10:52:24Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

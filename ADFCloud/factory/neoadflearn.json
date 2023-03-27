@@ -1,0 +1,9 @@
+{
+	"name": "neoadflearn",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f58eb411-59f1-4e7c-807f-894337b6700c",
+		"tenantId": "7a36b6ed-0eaf-45c0-a84a-a583d3b9f5a6"
+	}
+}

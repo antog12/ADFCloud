@@ -1,0 +1,27 @@
+{
+	"name": "destino_jugadoresPornacionalidad",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "JugadoresPorNacionalidad",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Nacionalidad",
+				"type": "varchar"
+			},
+			{
+				"name": "CantidadJugadores",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "JugadoresPornacinalidad"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

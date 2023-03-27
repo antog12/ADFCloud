@@ -1,0 +1,56 @@
+{
+	"name": "CdD_videoGames2022",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adfbyexmplesa1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Varios"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "video-games-2022.csv",
+				"container": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Month",
+				"type": "String"
+			},
+			{
+				"name": "Day",
+				"type": "String"
+			},
+			{
+				"name": "Title",
+				"type": "String"
+			},
+			{
+				"name": "Platform(s)",
+				"type": "String"
+			},
+			{
+				"name": "Genre(s)",
+				"type": "String"
+			},
+			{
+				"name": "Developer(s)",
+				"type": "String"
+			},
+			{
+				"name": "Publisher(s)",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

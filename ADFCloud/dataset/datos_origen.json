@@ -1,0 +1,57 @@
+{
+	"name": "datos_origen",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adfbyexmplesa1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "datos.csv",
+				"container": "hkb"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "String"
+			},
+			{
+				"name": "NAME",
+				"type": "String"
+			},
+			{
+				"name": "NUMERICID",
+				"type": "String"
+			},
+			{
+				"name": "QUALITY",
+				"type": "String"
+			},
+			{
+				"name": "TIMESTAMP",
+				"type": "String"
+			},
+			{
+				"name": "VALUE",
+				"type": "String"
+			},
+			{
+				"name": "CREACION",
+				"type": "String"
+			},
+			{
+				"name": "ACTUALIZACION",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

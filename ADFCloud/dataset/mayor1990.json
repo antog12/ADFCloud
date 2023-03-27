@@ -1,0 +1,31 @@
+{
+	"name": "mayor1990",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LnkSSIS_DB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NombreCompleto",
+				"type": "nvarchar"
+			},
+			{
+				"name": "FechaNacimiento",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Mayores1990"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

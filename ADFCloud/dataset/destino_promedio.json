@@ -1,0 +1,27 @@
+{
+	"name": "destino_promedio",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "promedios",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "PiePref",
+				"type": "varchar"
+			},
+			{
+				"name": "PromedioPesoKG",
+				"type": "float",
+				"precision": 15
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Promedios"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

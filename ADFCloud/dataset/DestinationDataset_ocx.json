@@ -1,0 +1,18 @@
+{
+	"name": "DestinationDataset_ocx",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "conexionDestinoADLS",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "destinomaster"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

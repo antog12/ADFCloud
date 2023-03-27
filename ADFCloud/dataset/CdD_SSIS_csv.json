@@ -1,0 +1,26 @@
+{
+	"name": "CdD_SSIS_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorageLnkSSIS_csv",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "SSIS_ADF"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "ssis"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

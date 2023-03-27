@@ -1,0 +1,16 @@
+{
+	"name": "CdD_TableList",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LookUpDemosSql",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Varios"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

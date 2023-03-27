@@ -1,0 +1,36 @@
+{
+	"name": "Ds_stateAbreviationCSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LNK_Abbreviations",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Varios"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "abbr-name.csv",
+				"container": "cookbookorigen"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "AL",
+				"type": "String"
+			},
+			{
+				"name": "Alabama",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

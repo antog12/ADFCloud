@@ -1,0 +1,26 @@
+{
+	"name": "CdD_origen_SQLDimensiones",
+	"properties": {
+		"description": "origen genérico parametrizado",
+		"linkedServiceName": {
+			"referenceName": "LNK_DB_AW19_origenADLS",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"Tablename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "SalesLT",
+			"table": {
+				"value": "@dataset().Tablename",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,55 @@
+{
+	"name": "CdD_VideoGamesSQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AdfByExampleSql",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Varios"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Month",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Day",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "Title",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Platform",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Genre",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Developer",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Publisher",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "videoGames_2022"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
