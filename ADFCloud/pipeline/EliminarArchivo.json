@@ -1,5 +1,5 @@
 {
-	"name": "ArchivarArchivo",
+	"name": "EliminarArchivo",
 	"properties": {
 		"description": "Archivar un archivo despues del copy data sql en otra carpeta de almacenaje.",
 		"activities": [
