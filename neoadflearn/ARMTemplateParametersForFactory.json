@@ -1,0 +1,87 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "neoadflearn"
+		},
+		"AdfByExampleSql_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorageLnkSSIS_csv_connectionString": {
+			"value": ""
+		},
+		"AzureBlobStorage_txt_connectionString": {
+			"value": ""
+		},
+		"ConexionDestinoADLS_sql_connectionString": {
+			"value": ""
+		},
+		"ConexionOrigeADLS_accountKey": {
+			"value": ""
+		},
+		"JugadoresPorNacionalidad_connectionString": {
+			"value": ""
+		},
+		"LNK_Abbreviations_connectionString": {
+			"value": ""
+		},
+		"LNK_DB_AW19_origenADLS_connectionString": {
+			"value": ""
+		},
+		"LNK_ETLinAzure_connectionString": {
+			"value": ""
+		},
+		"LNK_statesIncomeData_connectionString": {
+			"value": ""
+		},
+		"LnkSSIS_DB_connectionString": {
+			"value": ""
+		},
+		"LookUpDemosSql_connectionString": {
+			"value": ""
+		},
+		"OrigengenericoADLS_accountKey": {
+			"value": ""
+		},
+		"adfbyexample_connectionString": {
+			"value": ""
+		},
+		"adfbyexamplesa_connectionString": {
+			"value": ""
+		},
+		"adfbyexmplesa1_connectionString": {
+			"value": ""
+		},
+		"conexionDestinoADLS_accountKey": {
+			"value": ""
+		},
+		"conexionOrigenADLS_accountKey": {
+			"value": ""
+		},
+		"destinogenericoADLS_accountKey": {
+			"value": ""
+		},
+		"moviesBlobstorage_connectionString": {
+			"value": ""
+		},
+		"promedios_connectionString": {
+			"value": ""
+		},
+		"ConexionOrigeADLS_properties_typeProperties_url": {
+			"value": "https://neomaster.dfs.core.windows.net/"
+		},
+		"OrigengenericoADLS_properties_typeProperties_url": {
+			"value": "https://neomaster.dfs.core.windows.net/"
+		},
+		"conexionDestinoADLS_properties_typeProperties_url": {
+			"value": "https://neomaster.dfs.core.windows.net/"
+		},
+		"conexionOrigenADLS_properties_typeProperties_url": {
+			"value": "https://neomaster.dfs.core.windows.net/"
+		},
+		"destinogenericoADLS_properties_typeProperties_url": {
+			"value": "https://neomaster.dfs.core.windows.net/"
+		}
+	}
+}

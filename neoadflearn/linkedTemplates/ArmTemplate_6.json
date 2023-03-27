@@ -1,0 +1,2281 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "neoadflearn"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/moviecsv_a_moviecsv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "moviedatasetorigen",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "moviedatasetdestino",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Capítulo 2"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-02-23T16:46:48Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipelineDB_a_CSV')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "migración de datos de una BD a un archivo csv",
+				"activities": [
+					{
+						"name": "De BBDD a CSV",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"name": "ID",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "Nombre",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "NombreCompleto",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "NombreCompleto",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Club",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "Club",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Liga",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "Liga",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FechaNacimiento",
+											"type": "DateTime",
+											"physicalType": "date"
+										},
+										"sink": {
+											"name": "FechaNacimiento",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AlturaCM",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"name": "AlturaCM",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "PesoKG",
+											"type": "Int32",
+											"physicalType": "int"
+										},
+										"sink": {
+											"name": "PesoKG",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Nacionalidad",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "Nacionalidad",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ValorEuropa",
+											"type": "Double",
+											"physicalType": "float"
+										},
+										"sink": {
+											"name": "ValorEuropa",
+											"type": "String",
+											"physicalType": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "PiePreferido",
+											"type": "String",
+											"physicalType": "varchar"
+										},
+										"sink": {
+											"name": "PiePreferido",
+											"type": "String",
+											"physicalType": "String"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "CdD_SSIS_DB",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "CdD_SSIS_csv",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "SSIS_ADF"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-16T08:54:25Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_forEach')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup1",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select distinct Name\nfrom Countries",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlTable1",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup1').output.value",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Set Country value",
+									"type": "SetVariable",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"variableName": "Country",
+										"value": {
+											"value": "@item().name",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"Country": {
+						"type": "String"
+					}
+				},
+				"folder": {
+					"name": "Varios"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-14T10:24:43Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_copy')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data",
+						"description": "de txt a csv",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_src_txt",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_Sink_txt",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Varios"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-08T08:55:04Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pl_copy_foreach')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get Metadata1",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ds_input",
+								"type": "DatasetReference",
+								"parameters": {}
+							},
+							"fieldList": [
+								"childItems",
+								"itemName",
+								"itemType"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Metadata1').output.childItems",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy data1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true,
+												"wildcardFileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "DelimitedTextSink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											},
+											"formatSettings": {
+												"type": "DelimitedTextWriteSettings",
+												"quoteAllText": true,
+												"fileExtension": ".txt"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_input",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_Sink_txt",
+											"type": "DatasetReference",
+											"parameters": {}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Varios"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-08T13:12:16Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CRUD')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "datos_origen",
+								"type": "DatasetReference"
+							},
+							"name": "hkbOrigen"
+						},
+						{
+							"dataset": {
+								"referenceName": "hkbDestino",
+								"type": "DatasetReference"
+							},
+							"name": "hkbDestino"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "hkbDestino",
+								"type": "DatasetReference"
+							},
+							"name": "destinoH"
+						},
+						{
+							"dataset": {
+								"referenceName": "hkbDestino",
+								"type": "DatasetReference"
+							},
+							"name": "destinoK"
+						},
+						{
+							"dataset": {
+								"referenceName": "hkbDestino",
+								"type": "DatasetReference"
+							},
+							"name": "destinoB"
+						}
+					],
+					"transformations": [
+						{
+							"name": "md5"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "ordenar1"
+						},
+						{
+							"name": "select2"
+						},
+						{
+							"name": "ordenar2"
+						},
+						{
+							"name": "FullMergejoin"
+						},
+						{
+							"name": "conditionalSplit"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "alterNEW"
+						},
+						{
+							"name": "fechaFin"
+						},
+						{
+							"name": "alterDelete"
+						},
+						{
+							"name": "fechamodificacion"
+						},
+						{
+							"name": "alterChange"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as long,",
+						"          NAME as string,",
+						"          NUMERICID as integer,",
+						"          QUALITY as integer,",
+						"          TIMESTAMP as timestamp,",
+						"          VALUE as double,",
+						"          CREACION as timestamp,",
+						"          ACTUALIZACION as timestamp",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> hkbOrigen",
+						"source(output(",
+						"          ID as long,",
+						"          ID_HKB as long,",
+						"          NAME as string,",
+						"          NUMERICID as integer,",
+						"          QUALITY as integer,",
+						"          TIMESTAMP as timestamp,",
+						"          VALUE as decimal(18,2),",
+						"          FLG_ACTV as integer,",
+						"          FECHA_INI_ACTV as timestamp,",
+						"          FECHA_FIN_ACTV as timestamp,",
+						"          ETL_DATE as timestamp,",
+						"          CREATE_ID_WKF as long,",
+						"          UPDATE_ID_WKF as long,",
+						"          DELETE_ID_WKF as long,",
+						"          CREATE_DATE as timestamp,",
+						"          UPDATE_DATE as timestamp,",
+						"          DELETE_DATE as timestamp,",
+						"          CREATE_USER as string,",
+						"          UPDATE_USER as string,",
+						"          DELETE_USER as string,",
+						"          MD5_CHECKSUM as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     query: 'select * from destino_HKB\\nwhere flg_actv =1',",
+						"     format: 'query') ~> hkbDestino",
+						"hkbOrigen derive(MD5_CHECKSUM = md5(NAME,NUMERICID,QUALITY,TIMESTAMP,VALUE,CREACION,ACTUALIZACION)) ~> md5",
+						"md5 select(mapColumn(",
+						"          O_ID = ID,",
+						"          O_NAME = NAME,",
+						"          O_NUMERICID = NUMERICID,",
+						"          O_QUALITY = QUALITY,",
+						"          O_TIMESTAMP = TIMESTAMP,",
+						"          O_VALUE = VALUE,",
+						"          O_CREACION = CREACION,",
+						"          O_ACTUALIZACION = ACTUALIZACION,",
+						"          O_MD5_CHECKSUM = MD5_CHECKSUM",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sort(asc(O_TIMESTAMP, true)) ~> ordenar1",
+						"hkbDestino select(mapColumn(",
+						"          D_ID = ID,",
+						"          D_ID_HKB = ID_HKB,",
+						"          D_NAME = NAME,",
+						"          D_NUMERICID = NUMERICID,",
+						"          D_QUALITY = QUALITY,",
+						"          D_TIMESTAMP = TIMESTAMP,",
+						"          D_VALUE = VALUE,",
+						"          D_FLG_ACTV = FLG_ACTV,",
+						"          D_FECHA_INI_ACTV = FECHA_INI_ACTV,",
+						"          D_FECHA_FIN_ACTV = FECHA_FIN_ACTV,",
+						"          D_ETL_DATE = ETL_DATE,",
+						"          D_CREATE_ID_WKF = CREATE_ID_WKF,",
+						"          D_UPDATE_ID_WKF = UPDATE_ID_WKF,",
+						"          D_DELETE_ID_WKF = DELETE_ID_WKF,",
+						"          D_CREATE_DATE = CREATE_DATE,",
+						"          D_UPDATE_DATE = UPDATE_DATE,",
+						"          D_DELETE_DATE = DELETE_DATE,",
+						"          D_CREATE_USER = CREATE_USER,",
+						"          D_UPDATE_USER = UPDATE_USER,",
+						"          D_DELETE_USER = DELETE_USER,",
+						"          D_MD5_CHECKSUM = MD5_CHECKSUM",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select2",
+						"select2 sort(asc(D_TIMESTAMP, true)) ~> ordenar2",
+						"ordenar1, ordenar2 join(O_TIMESTAMP == D_TIMESTAMP,",
+						"     joinType:'outer',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> FullMergejoin",
+						"FullMergejoin split(isNull(D_ID_HKB),",
+						"     isNull(O_ID),",
+						"     iif(O_MD5_CHECKSUM!=D_MD5_CHECKSUM, true(), false()),",
+						"     disjoint: false) ~> conditionalSplit@(New, Delete, Change)",
+						"conditionalSplit@New derive(D_FLG_ACTV = 1,",
+						"          D_FECHA_INI_ACTV = fromUTC(currentTimestamp(), \"Europe/Madrid\"),",
+						"          D_ETL_DATE = fromUTC(currentTimestamp(), \"Europe/Madrid\"),",
+						"          D_CREATE_DATE = fromUTC(currentTimestamp(), \"Europe/Madrid\"),",
+						"          D_CREATE_USER = \"AQ_AZURE\") ~> derivedColumn1",
+						"conditionalSplit@New alterRow(insertIf(true())) ~> alterNEW",
+						"conditionalSplit@Delete derive(D_DELETE_DATE = fromUTC(currentTimestamp(), \"Europe/Madrid\")) ~> fechaFin",
+						"fechaFin alterRow(updateIf(true())) ~> alterDelete",
+						"conditionalSplit@Change derive(D_FLG_ACTV = 0,",
+						"          D_FECHA_FIN_ACTV = fromUTC(currentTimestamp(), \"Europe/Madrid\"),",
+						"          D_ETL_DATE = fromUTC(currentTimestamp(), \"Europe/Madrid\"),",
+						"          D_UPDATE_DATE = fromUTC(currentTimestamp(), \"Europe/Madrid\"),",
+						"          D_UPDATE_USER = \"AQ_AZURE\") ~> fechamodificacion",
+						"fechamodificacion alterRow(updateIf(true())) ~> alterChange",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as long,",
+						"          ID_HKB as long,",
+						"          NAME as string,",
+						"          NUMERICID as integer,",
+						"          QUALITY as integer,",
+						"          TIMESTAMP as timestamp,",
+						"          VALUE as decimal(18,2),",
+						"          FLG_ACTV as integer,",
+						"          FECHA_INI_ACTV as timestamp,",
+						"          FECHA_FIN_ACTV as timestamp,",
+						"          ETL_DATE as timestamp,",
+						"          CREATE_ID_WKF as long,",
+						"          UPDATE_ID_WKF as long,",
+						"          DELETE_ID_WKF as long,",
+						"          CREATE_DATE as timestamp,",
+						"          UPDATE_DATE as timestamp,",
+						"          DELETE_DATE as timestamp,",
+						"          CREATE_USER as string,",
+						"          UPDATE_USER as string,",
+						"          DELETE_USER as string,",
+						"          MD5_CHECKSUM as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID_HKB = O_ID,",
+						"          NAME = O_NAME,",
+						"          NUMERICID = O_NUMERICID,",
+						"          QUALITY = O_QUALITY,",
+						"          TIMESTAMP = O_TIMESTAMP,",
+						"          VALUE = O_VALUE,",
+						"          FLG_ACTV = D_FLG_ACTV,",
+						"          FECHA_INI_ACTV = D_FECHA_INI_ACTV,",
+						"          ETL_DATE = D_ETL_DATE,",
+						"          CREATE_DATE = D_CREATE_DATE,",
+						"          CREATE_USER = D_CREATE_USER,",
+						"          UPDATE_USER = D_UPDATE_USER,",
+						"          MD5_CHECKSUM = O_MD5_CHECKSUM",
+						"     )) ~> destinoH",
+						"alterDelete sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as long,",
+						"          ID_HKB as long,",
+						"          NAME as string,",
+						"          NUMERICID as integer,",
+						"          QUALITY as integer,",
+						"          TIMESTAMP as timestamp,",
+						"          VALUE as decimal(18,2),",
+						"          FLG_ACTV as integer,",
+						"          FECHA_INI_ACTV as timestamp,",
+						"          FECHA_FIN_ACTV as timestamp,",
+						"          ETL_DATE as timestamp,",
+						"          CREATE_ID_WKF as long,",
+						"          UPDATE_ID_WKF as long,",
+						"          DELETE_ID_WKF as long,",
+						"          CREATE_DATE as timestamp,",
+						"          UPDATE_DATE as timestamp,",
+						"          DELETE_DATE as timestamp,",
+						"          CREATE_USER as string,",
+						"          UPDATE_USER as string,",
+						"          DELETE_USER as string,",
+						"          MD5_CHECKSUM as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID_HKB = D_ID,",
+						"          DELETE_DATE = D_DELETE_DATE",
+						"     )) ~> destinoK",
+						"alterChange sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as long,",
+						"          ID_HKB as long,",
+						"          NAME as string,",
+						"          NUMERICID as integer,",
+						"          QUALITY as integer,",
+						"          TIMESTAMP as timestamp,",
+						"          VALUE as decimal(18,2),",
+						"          FLG_ACTV as integer,",
+						"          FECHA_INI_ACTV as timestamp,",
+						"          FECHA_FIN_ACTV as timestamp,",
+						"          ETL_DATE as timestamp,",
+						"          CREATE_ID_WKF as long,",
+						"          UPDATE_ID_WKF as long,",
+						"          DELETE_ID_WKF as long,",
+						"          CREATE_DATE as timestamp,",
+						"          UPDATE_DATE as timestamp,",
+						"          DELETE_DATE as timestamp,",
+						"          CREATE_USER as string,",
+						"          UPDATE_USER as string,",
+						"          DELETE_USER as string,",
+						"          MD5_CHECKSUM as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID_HKB = D_ID_HKB,",
+						"          FLG_ACTV = D_FLG_ACTV,",
+						"          FECHA_FIN_ACTV = D_FECHA_FIN_ACTV,",
+						"          ETL_DATE = D_ETL_DATE,",
+						"          UPDATE_DATE = D_UPDATE_DATE,",
+						"          UPDATE_USER = D_UPDATE_USER,",
+						"          MD5_CHECKSUM = O_MD5_CHECKSUM",
+						"     )) ~> destinoB"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CondicionSiNoEdad')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SSIS"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "CdD_SSIS_DB",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "mayor1990",
+								"type": "DatasetReference"
+							},
+							"name": "mayores1990"
+						},
+						{
+							"dataset": {
+								"referenceName": "MenorOigual1990",
+								"type": "DatasetReference"
+							},
+							"name": "Menores1990"
+						}
+					],
+					"transformations": [
+						{
+							"name": "select1"
+						},
+						{
+							"name": "split1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          Nombre as string,",
+						"          NombreCompleto as string,",
+						"          Club as string,",
+						"          Liga as string,",
+						"          FechaNacimiento as date,",
+						"          AlturaCM as integer,",
+						"          PesoKG as integer,",
+						"          Nacionalidad as string,",
+						"          ValorEuropa as double,",
+						"          PiePreferido as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 select(mapColumn(",
+						"          ID,",
+						"          NombreCompleto,",
+						"          FechaNacimiento",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 split(year(FechaNacimiento) > 1990,",
+						"     disjoint: false) ~> split1@(Mayor1990, MenorOigual1990)",
+						"split1@Mayor1990 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as integer,",
+						"          NombreCompleto as string,",
+						"          FechaNacimiento as date",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> mayores1990",
+						"split1@MenorOigual1990 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as integer,",
+						"          NombreCompleto as string,",
+						"          FechaNacimiento as date",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> Menores1990"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DFT_StateIncomeMappingDataflow')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_stateAbreviationParquet",
+								"type": "DatasetReference"
+							},
+							"name": "StateAbreviation"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_incomeDataParquet",
+								"type": "DatasetReference"
+							},
+							"name": "StateincomeData"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_SalesIncomesPerStates",
+								"type": "DatasetReference"
+							},
+							"name": "SinkSalesLT"
+						}
+					],
+					"transformations": [
+						{
+							"name": "LKPStateAbbreviation"
+						},
+						{
+							"name": "DERStateIncomePipelineRunID"
+						},
+						{
+							"name": "SELRemoveUnosedColumns"
+						},
+						{
+							"name": "AGGStateIncome"
+						}
+					],
+					"scriptLines": [
+						"parameters{",
+						"     PipelineRunID as string (\"No parameter value\")",
+						"}",
+						"source(output(",
+						"          abbreviation as string,",
+						"          StateName as string",
+						"     ),",
+						"     allowSchemaDrift: false,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> StateAbreviation",
+						"source(output(",
+						"          STATE as string,",
+						"          A02650 as string",
+						"     ),",
+						"     allowSchemaDrift: false,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'parquet') ~> StateincomeData",
+						"StateincomeData, StateAbreviation lookup(STATE == abbreviation,",
+						"     multiple: false,",
+						"     pickup: 'first',",
+						"     asc(StateName, true),",
+						"     broadcast: 'right')~> LKPStateAbbreviation",
+						"LKPStateAbbreviation derive(StateIncome = toLong(A02650),",
+						"          PipeLineRunID = $PipelineRunID) ~> DERStateIncomePipelineRunID",
+						"DERStateIncomePipelineRunID select(mapColumn(",
+						"          abbreviation,",
+						"          StateName,",
+						"          StateIncome,",
+						"          PipeLineRunID",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SELRemoveUnosedColumns",
+						"SELRemoveUnosedColumns aggregate(groupBy(abbreviation,",
+						"          StateName,",
+						"          PipeLineRunID),",
+						"     StateIncome = sum(StateIncome)) ~> AGGStateIncome",
+						"AGGStateIncome sink(allowSchemaDrift: false,",
+						"     validateSchema: false,",
+						"     input(",
+						"          StateAbbreviation as string,",
+						"          Statename as string,",
+						"          StateIncome as long,",
+						"          BatchID as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     truncate:true,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          StateAbbreviation = abbreviation,",
+						"          Statename = StateName,",
+						"          StateIncome,",
+						"          BatchID = PipeLineRunID",
+						"     )) ~> SinkSalesLT"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LookUp')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SSIS"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "CdD_SSIS_DB",
+								"type": "DatasetReference"
+							},
+							"name": "origen"
+						},
+						{
+							"dataset": {
+								"referenceName": "DB_edadJugadores",
+								"type": "DatasetReference"
+							},
+							"name": "origenedad"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DB_edadJugadores",
+								"type": "DatasetReference"
+							},
+							"name": "destino"
+						}
+					],
+					"transformations": [
+						{
+							"name": "select"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "exists1"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          Nombre as string,",
+						"          NombreCompleto as string,",
+						"          Club as string,",
+						"          Liga as string,",
+						"          FechaNacimiento as date,",
+						"          AlturaCM as integer,",
+						"          PesoKG as integer,",
+						"          Nacionalidad as string,",
+						"          ValorEuropa as double,",
+						"          PiePreferido as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> origen",
+						"source(output(",
+						"          ID as integer,",
+						"          NombreCompleto as string,",
+						"          Edad as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> origenedad",
+						"origen select(mapColumn(",
+						"          ID,",
+						"          NombreCompleto,",
+						"          FechaNacimiento",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select",
+						"exists1 derive(Edad = minus(year(currentDate()),year(FechaNacimiento))) ~> derivedColumn1",
+						"select, select1 exists(select@ID == select1@ID,",
+						"     negate:true,",
+						"     broadcast: 'auto')~> exists1",
+						"origenedad select(mapColumn(",
+						"          ID,",
+						"          NombreCompleto,",
+						"          Edad",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as integer,",
+						"          NombreCompleto as string,",
+						"          Edad as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     preSQLs:['truncate table edadjugadores'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> destino"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Mergeando')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SSIS"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "mayor1990",
+								"type": "DatasetReference"
+							},
+							"name": "Mayores1990"
+						},
+						{
+							"dataset": {
+								"referenceName": "MenorOigual1990",
+								"type": "DatasetReference"
+							},
+							"name": "Menores1990"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DB_fifaMerged",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "sort1"
+						},
+						{
+							"name": "sort2"
+						},
+						{
+							"name": "Combinar"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          NombreCompleto as string,",
+						"          FechaNacimiento as date",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> Mayores1990",
+						"source(output(",
+						"          ID as integer,",
+						"          NombreCompleto as string,",
+						"          FechaNacimiento as date",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> Menores1990",
+						"Mayores1990 sort(asc(ID, true)) ~> sort1",
+						"Menores1990 sort(asc(ID, true)) ~> sort2",
+						"sort1, sort2 join(Mayores1990@ID == Menores1990@ID,",
+						"     joinType:'outer',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> Combinar",
+						"Combinar sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as integer,",
+						"          NombreCompleto as string,",
+						"          FechaNacimiento as date",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     preSQLs:['truncate table FIFAMerged'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PieEsp')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SSIS"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "CdD_SSIS_DB",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "FIFA_destino",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "PieEsp"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          Nombre as string,",
+						"          NombreCompleto as string,",
+						"          Club as string,",
+						"          Liga as string,",
+						"          FechaNacimiento as date,",
+						"          AlturaCM as integer,",
+						"          PesoKG as integer,",
+						"          Nacionalidad as string,",
+						"          ValorEuropa as double,",
+						"          PiePreferido as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 derive(PieEsp = case(PiePreferido =='Left','Izquierdo','Derecho')) ~> PieEsp",
+						"PieEsp sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as integer,",
+						"          Nombre as string,",
+						"          NombreCompleto as string,",
+						"          Club as string,",
+						"          Liga as string,",
+						"          FechaNacimiento as date,",
+						"          AlturaCM as integer,",
+						"          PesoKG as integer,",
+						"          Nacionalidad as string,",
+						"          ValorEuropa as double,",
+						"          PiePreferido as string,",
+						"          PieEsp as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     preSQLs:['truncate table [dbo].[FIFA_destino]'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID,",
+						"          Nombre,",
+						"          NombreCompleto,",
+						"          Club,",
+						"          Liga,",
+						"          FechaNacimiento,",
+						"          AlturaCM,",
+						"          PesoKG,",
+						"          Nacionalidad,",
+						"          ValorEuropa,",
+						"          PiePreferido,",
+						"          PieEsp",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TransformJollyGoodSales')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "Capítulo 7"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "CdD_Jolly_Excel",
+								"type": "DatasetReference"
+							},
+							"name": "JolleyGoodSales"
+						},
+						{
+							"dataset": {
+								"referenceName": "CdD_ExcelTipodeCambio",
+								"type": "DatasetReference"
+							},
+							"name": "ExchangeRates"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ASQL_dboSalesLoad",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "ExcludedMonthTotal"
+						},
+						{
+							"name": "RatestoUSD"
+						},
+						{
+							"name": "lookup1"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"parameters{",
+						"     p_RunSeqno as integer (-1)",
+						"}",
+						"source(output(",
+						"          Period as date,",
+						"          Product as string,",
+						"          {Unit Price} as double,",
+						"          Currency as string,",
+						"          {Units Sold} as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> JolleyGoodSales",
+						"source(output(",
+						"          FromCurrency as string,",
+						"          ToCurrency as string,",
+						"          Date as date,",
+						"          ExchangeRate as double",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> ExchangeRates",
+						"JolleyGoodSales filter(Product != 'Month Total') ~> ExcludedMonthTotal",
+						"ExchangeRates filter(ToCurrency == 'USD') ~> RatestoUSD",
+						"ExcludedMonthTotal, RatestoUSD lookup(Currency == FromCurrency",
+						"     && Period == Date,",
+						"     multiple: false,",
+						"     pickup: 'any',",
+						"     broadcast: 'auto')~> lookup1",
+						"lookup1 derive(columnSalesValueUSD = {Unit Price}*{Units Sold}*ExchangeRate,",
+						"          Retailer = 'jolly Good Ltd',",
+						"          RunSeqNo = $p_RunSeqno) ~> derivedColumn1",
+						"derivedColumn1 select(mapColumn(",
+						"          Salesmonth = Period,",
+						"          Product,",
+						"          UnitsSold = {Units Sold},",
+						"          SalesValueUSD = columnSalesValueUSD,",
+						"          Retailer,",
+						"          RunSeqNo",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          RowId as integer,",
+						"          Retailer as string,",
+						"          SalesMonth as date,",
+						"          Product as string,",
+						"          ManufacturerProductCode as string,",
+						"          SalesValueUSD as decimal(18,2),",
+						"          UnitsSold as integer,",
+						"          SourceFileName as string,",
+						"          RunSeqNo as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          Retailer,",
+						"          SalesMonth = Salesmonth,",
+						"          Product,",
+						"          SalesValueUSD,",
+						"          UnitsSold,",
+						"          RunSeqNo",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Valores Agregados')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SSIS"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "CdD_SSIS_DB",
+								"type": "DatasetReference"
+							},
+							"name": "OrigenFifa"
+						},
+						{
+							"dataset": {
+								"referenceName": "CdD_SSIS_DB",
+								"type": "DatasetReference"
+							},
+							"name": "OrigenFifa2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "destino_promedio",
+								"type": "DatasetReference"
+							},
+							"name": "destinoPromedios"
+						},
+						{
+							"dataset": {
+								"referenceName": "destino_jugadoresPornacionalidad",
+								"type": "DatasetReference"
+							},
+							"name": "DestinoJugadoresPornacionalidad"
+						}
+					],
+					"transformations": [
+						{
+							"name": "PromedioPeso"
+						},
+						{
+							"name": "numJugadoresPorPaiises"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          Nombre as string,",
+						"          NombreCompleto as string,",
+						"          Club as string,",
+						"          Liga as string,",
+						"          FechaNacimiento as date,",
+						"          AlturaCM as integer,",
+						"          PesoKG as integer,",
+						"          Nacionalidad as string,",
+						"          ValorEuropa as double,",
+						"          PiePreferido as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> OrigenFifa",
+						"source(output(",
+						"          ID as integer,",
+						"          Nombre as string,",
+						"          NombreCompleto as string,",
+						"          Club as string,",
+						"          Liga as string,",
+						"          FechaNacimiento as date,",
+						"          AlturaCM as integer,",
+						"          PesoKG as integer,",
+						"          Nacionalidad as string,",
+						"          ValorEuropa as double,",
+						"          PiePreferido as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> OrigenFifa2",
+						"OrigenFifa aggregate(groupBy(PiePreferido),",
+						"     PesoKG = avg(PesoKG)) ~> PromedioPeso",
+						"OrigenFifa2 aggregate(groupBy(Nacionalidad),",
+						"     ID = count(ID)) ~> numJugadoresPorPaiises",
+						"PromedioPeso sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          PiePref as string,",
+						"          PromedioPesoKG as double",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          PiePref = PiePreferido,",
+						"          PromedioPesoKG = PesoKG",
+						"     )) ~> destinoPromedios",
+						"numJugadoresPorPaiises sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          Nacionalidad as string,",
+						"          CantidadJugadores as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          Nacionalidad,",
+						"          CantidadJugadores = ID",
+						"     )) ~> DestinoJugadoresPornacionalidad"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflowMovies')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "CdD_Movies_ADLS",
+								"type": "DatasetReference"
+							},
+							"name": "MoviesADLS"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "AzureSqlTable3",
+								"type": "DatasetReference"
+							},
+							"name": "Destino"
+						}
+					],
+					"transformations": [
+						{
+							"name": "select1"
+						},
+						{
+							"name": "filter1"
+						},
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "window1"
+						},
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "alterRow1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          movie as string,",
+						"          title as string,",
+						"          genres as string,",
+						"          year as string,",
+						"          Rating as string,",
+						"          {Rotton Tomato} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> MoviesADLS",
+						"MoviesADLS select(mapColumn(",
+						"          movie,",
+						"          title,",
+						"          genres,",
+						"          year,",
+						"          {Rotten Tomato} = {Rotton Tomato}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 filter(toInteger(year) > 1950) ~> filter1",
+						"filter1 derive(PrimaryGenre = iif(locate('|', genres) > 1,left(genres,locate('|',genres)-1),genres)) ~> derivedColumn1",
+						"derivedColumn1 window(over(PrimaryGenre,",
+						"          year),",
+						"     desc({Rotten Tomato}, true),",
+						"     RatingsRank = rank()) ~> window1",
+						"window1 aggregate(groupBy(PrimaryGenre,",
+						"          year),",
+						"     AverageRating = avg(toInteger({Rotten Tomato})),",
+						"          HighestRated = first(title),",
+						"          LowestRated = last(title),",
+						"          NumberOfMovies = count()) ~> aggregate1",
+						"aggregate1 alterRow(upsertIf(true())) ~> alterRow1",
+						"alterRow1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:false,",
+						"     updateable:false,",
+						"     upsertable:true,",
+						"     keys:['PrimaryGenre','year'],",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> Destino"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/mergeJoin')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DB_edadJugadores",
+								"type": "DatasetReference"
+							},
+							"name": "edadjugadores"
+						},
+						{
+							"dataset": {
+								"referenceName": "CdD_SSIS_DB",
+								"type": "DatasetReference"
+							},
+							"name": "Fifa"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DB_edadNacimientoJugadores",
+								"type": "DatasetReference"
+							},
+							"name": "destino"
+						}
+					],
+					"transformations": [
+						{
+							"name": "sort1"
+						},
+						{
+							"name": "select1"
+						},
+						{
+							"name": "sort2"
+						},
+						{
+							"name": "join1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as integer,",
+						"          NombreCompleto as string,",
+						"          Edad as integer",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> edadjugadores",
+						"source(output(",
+						"          ID as integer,",
+						"          Nombre as string,",
+						"          NombreCompleto as string,",
+						"          Club as string,",
+						"          Liga as string,",
+						"          FechaNacimiento as date,",
+						"          AlturaCM as integer,",
+						"          PesoKG as integer,",
+						"          Nacionalidad as string,",
+						"          ValorEuropa as double,",
+						"          PiePreferido as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> Fifa",
+						"edadjugadores sort(asc(ID, true)) ~> sort1",
+						"Fifa select(mapColumn(",
+						"          ID,",
+						"          FechaNacimiento",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"select1 sort(asc(ID, true)) ~> sort2",
+						"sort1, sort2 join(edadjugadores@ID == select1@ID,",
+						"     joinType:'inner',",
+						"     matchType:'exact',",
+						"     ignoreSpaces: false,",
+						"     broadcast: 'auto')~> join1",
+						"join1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as integer,",
+						"          NombreCompleto as string,",
+						"          Edad as integer,",
+						"          FechaNacimiento as date",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     preSQLs:['truncate table EdadnacimientoJugadores'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> destino"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/multiplerowsInsingle')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "de varias filas a una sola",
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DelimitedText2",
+								"type": "DatasetReference"
+							},
+							"name": "origen"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "destinogenericoADLS",
+								"type": "LinkedServiceReference"
+							},
+							"name": "destino"
+						}
+					],
+					"transformations": [
+						{
+							"name": "aggregate1"
+						},
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ItemId as string,",
+						"          VartId as string,",
+						"          ItemName as string,",
+						"          Vartname as string,",
+						"          WhNo as string,",
+						"          zone as string,",
+						"          Bin as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> origen",
+						"origen aggregate(groupBy(ItemId,",
+						"          ItemName),",
+						"     Vartname = collect(Vartname)) ~> aggregate1",
+						"aggregate1 derive(Vartname = replace(replace(replace(toString(Vartname),'\"',''),'[',''),']','')) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     fileSystem: 'output',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['ItemInfoDot.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> destino"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/singleRowInMultiple')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "origenColores2",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"linkedService": {
+								"referenceName": "conexionDestinoADLS",
+								"type": "LinkedServiceReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "flatten1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ItemId as string,",
+						"          ItemName as string,",
+						"          Vartname as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 derive(Vartname = split(Vartname, '|')) ~> derivedColumn1",
+						"derivedColumn1 foldDown(unroll(Vartname, Vartname),",
+						"     mapColumn(",
+						"          ItemId,",
+						"          ItemName,",
+						"          Vartname",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: false) ~> flatten1",
+						"flatten1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     format: 'delimited',",
+						"     fileSystem: 'output',",
+						"     columnDelimiter: ',',",
+						"     escapeChar: '\\\\',",
+						"     quoteChar: '\\\"',",
+						"     columnNamesAsHeader: true,",
+						"     partitionFileNames:['ItemInfoColores2.csv'],",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Agregate')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Delete Promedios",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "promedios",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "Delete promedios"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Delete jugadoresPorNacinalidad",
+						"type": "Script",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"linkedServiceName": {
+							"referenceName": "JugadoresPorNacionalidad",
+							"type": "LinkedServiceReference"
+						},
+						"typeProperties": {
+							"scripts": [
+								{
+									"type": "Query",
+									"text": "Delete JugadoresPornacinalidad"
+								}
+							],
+							"scriptBlockExecutionTimeout": "02:00:00"
+						}
+					},
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Delete Promedios",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Delete jugadoresPorNacinalidad",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Valores Agregados",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"OrigenFifa": {},
+									"OrigenFifa2": {},
+									"destinoPromedios": {},
+									"DestinoJugadoresPornacionalidad": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "SSIS_ADF"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-16T15:56:12Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Valores Agregados')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ConditionalEdad')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Mayores y Menores de 1990",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "CondicionSiNoEdad",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"mayores1990": {},
+									"Menores1990": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "SSIS_ADF"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-17T11:14:58Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/CondicionSiNoEdad')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HKB_datos')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "CRUD",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"hkbOrigen": {},
+									"hkbDestino": {},
+									"destinoH": {},
+									"destinoK": {},
+									"destinoB": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"folder": {
+					"name": "Varios"
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-03-10T11:02:28Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/CRUD')]"
+			]
+		}
+	]
+}

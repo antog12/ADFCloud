@@ -1,0 +1,364 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "neoadflearn"
+		},
+		"AdfByExampleSql_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"AdfByExampleSql\""
+		},
+		"AzureBlobStorageLnkSSIS_csv_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"AzureBlobStorageLnkSSIS_csv\""
+		},
+		"AzureBlobStorage_txt_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"AzureBlobStorage_txt\""
+		},
+		"ConexionDestinoADLS_sql_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"ConexionDestinoADLS_sql\""
+		},
+		"ConexionOrigeADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"ConexionOrigeADLS\""
+		},
+		"JugadoresPorNacionalidad_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"JugadoresPorNacionalidad\""
+		},
+		"LNK_Abbreviations_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"LNK_Abbreviations\""
+		},
+		"LNK_DB_AW19_origenADLS_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"LNK_DB_AW19_origenADLS\""
+		},
+		"LNK_ETLinAzure_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"LNK_ETLinAzure\""
+		},
+		"LNK_statesIncomeData_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"LNK_statesIncomeData\""
+		},
+		"LnkSSIS_DB_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"LnkSSIS_DB\""
+		},
+		"LookUpDemosSql_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"LookUpDemosSql\""
+		},
+		"OrigengenericoADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"OrigengenericoADLS\""
+		},
+		"adfbyexample_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"adfbyexample\""
+		},
+		"adfbyexamplesa_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"adfbyexamplesa\""
+		},
+		"adfbyexmplesa1_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"adfbyexmplesa1\""
+		},
+		"conexionDestinoADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"conexionDestinoADLS\""
+		},
+		"conexionOrigenADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"conexionOrigenADLS\""
+		},
+		"destinogenericoADLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"accountKey\"de \"destinogenericoADLS\""
+		},
+		"moviesBlobstorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"moviesBlobstorage\""
+		},
+		"promedios_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"promedios\""
+		},
+		"ConexionOrigeADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://neomaster.dfs.core.windows.net/"
+		},
+		"OrigengenericoADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://neomaster.dfs.core.windows.net/"
+		},
+		"conexionDestinoADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://neomaster.dfs.core.windows.net/"
+		},
+		"conexionOrigenADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://neomaster.dfs.core.windows.net/"
+		},
+		"destinogenericoADLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://neomaster.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "neoadflearn_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AdfByExampleSql_connectionString": {
+						"value": "[parameters('AdfByExampleSql_connectionString')]"
+					},
+					"AzureBlobStorageLnkSSIS_csv_connectionString": {
+						"value": "[parameters('AzureBlobStorageLnkSSIS_csv_connectionString')]"
+					},
+					"AzureBlobStorage_txt_connectionString": {
+						"value": "[parameters('AzureBlobStorage_txt_connectionString')]"
+					},
+					"ConexionDestinoADLS_sql_connectionString": {
+						"value": "[parameters('ConexionDestinoADLS_sql_connectionString')]"
+					},
+					"ConexionOrigeADLS_accountKey": {
+						"value": "[parameters('ConexionOrigeADLS_accountKey')]"
+					},
+					"JugadoresPorNacionalidad_connectionString": {
+						"value": "[parameters('JugadoresPorNacionalidad_connectionString')]"
+					},
+					"LNK_Abbreviations_connectionString": {
+						"value": "[parameters('LNK_Abbreviations_connectionString')]"
+					},
+					"LNK_DB_AW19_origenADLS_connectionString": {
+						"value": "[parameters('LNK_DB_AW19_origenADLS_connectionString')]"
+					},
+					"LNK_ETLinAzure_connectionString": {
+						"value": "[parameters('LNK_ETLinAzure_connectionString')]"
+					},
+					"LNK_statesIncomeData_connectionString": {
+						"value": "[parameters('LNK_statesIncomeData_connectionString')]"
+					},
+					"LnkSSIS_DB_connectionString": {
+						"value": "[parameters('LnkSSIS_DB_connectionString')]"
+					},
+					"LookUpDemosSql_connectionString": {
+						"value": "[parameters('LookUpDemosSql_connectionString')]"
+					},
+					"OrigengenericoADLS_accountKey": {
+						"value": "[parameters('OrigengenericoADLS_accountKey')]"
+					},
+					"adfbyexample_connectionString": {
+						"value": "[parameters('adfbyexample_connectionString')]"
+					},
+					"adfbyexamplesa_connectionString": {
+						"value": "[parameters('adfbyexamplesa_connectionString')]"
+					},
+					"adfbyexmplesa1_connectionString": {
+						"value": "[parameters('adfbyexmplesa1_connectionString')]"
+					},
+					"ConexionOrigeADLS_properties_typeProperties_url": {
+						"value": "[parameters('ConexionOrigeADLS_properties_typeProperties_url')]"
+					},
+					"OrigengenericoADLS_properties_typeProperties_url": {
+						"value": "[parameters('OrigengenericoADLS_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "neoadflearn_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"conexionDestinoADLS_accountKey": {
+						"value": "[parameters('conexionDestinoADLS_accountKey')]"
+					},
+					"conexionOrigenADLS_accountKey": {
+						"value": "[parameters('conexionOrigenADLS_accountKey')]"
+					},
+					"destinogenericoADLS_accountKey": {
+						"value": "[parameters('destinogenericoADLS_accountKey')]"
+					},
+					"moviesBlobstorage_connectionString": {
+						"value": "[parameters('moviesBlobstorage_connectionString')]"
+					},
+					"promedios_connectionString": {
+						"value": "[parameters('promedios_connectionString')]"
+					},
+					"conexionDestinoADLS_properties_typeProperties_url": {
+						"value": "[parameters('conexionDestinoADLS_properties_typeProperties_url')]"
+					},
+					"conexionOrigenADLS_properties_typeProperties_url": {
+						"value": "[parameters('conexionOrigenADLS_properties_typeProperties_url')]"
+					},
+					"destinogenericoADLS_properties_typeProperties_url": {
+						"value": "[parameters('destinogenericoADLS_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'neoadflearn_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "neoadflearn_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'neoadflearn_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "neoadflearn_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'neoadflearn_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "neoadflearn_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'neoadflearn_ArmTemplate_3')]"
+			]
+		},
+		{
+			"name": "neoadflearn_ArmTemplate_5",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_5.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'neoadflearn_ArmTemplate_4')]"
+			]
+		},
+		{
+			"name": "neoadflearn_ArmTemplate_6",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_6.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'neoadflearn_ArmTemplate_5')]"
+			]
+		},
+		{
+			"name": "neoadflearn_ArmTemplate_7",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_7.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'neoadflearn_ArmTemplate_6')]"
+			]
+		}
+	]
+}
