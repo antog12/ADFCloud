@@ -1,0 +1,88 @@
+{
+	"name": "CdD_VideoGames",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LnKGenerico_csv",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Video_Games.csv",
+				"fileSystem": "input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "Platform",
+				"type": "String"
+			},
+			{
+				"name": "Year_of_Release",
+				"type": "String"
+			},
+			{
+				"name": "Genre",
+				"type": "String"
+			},
+			{
+				"name": "Publisher",
+				"type": "String"
+			},
+			{
+				"name": "NA_Sales",
+				"type": "String"
+			},
+			{
+				"name": "EU_Sales",
+				"type": "String"
+			},
+			{
+				"name": "JP_Sales",
+				"type": "String"
+			},
+			{
+				"name": "Other_Sales",
+				"type": "String"
+			},
+			{
+				"name": "Global_Sales",
+				"type": "String"
+			},
+			{
+				"name": "Critic_Score",
+				"type": "String"
+			},
+			{
+				"name": "Critic_Count",
+				"type": "String"
+			},
+			{
+				"name": "User_Score",
+				"type": "String"
+			},
+			{
+				"name": "User_Count",
+				"type": "String"
+			},
+			{
+				"name": "Developer",
+				"type": "String"
+			},
+			{
+				"name": "Rating",
+				"type": "String"
+			}
+		]
+	}
+}

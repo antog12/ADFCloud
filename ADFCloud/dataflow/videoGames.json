@@ -1,0 +1,42 @@
+{
+	"name": "videoGames",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "CdD_VideoGames",
+						"type": "DatasetReference"
+					},
+					"name": "Origen"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          Name as string,",
+				"          Platform as string,",
+				"          Year_of_Release as string,",
+				"          Genre as string,",
+				"          Publisher as string,",
+				"          NA_Sales as string,",
+				"          EU_Sales as string,",
+				"          JP_Sales as string,",
+				"          Other_Sales as string,",
+				"          Global_Sales as string,",
+				"          Critic_Score as string,",
+				"          Critic_Count as string,",
+				"          User_Score as string,",
+				"          User_Count as string,",
+				"          Developer as string,",
+				"          Rating as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Origen"
+			]
+		}
+	}
+}
