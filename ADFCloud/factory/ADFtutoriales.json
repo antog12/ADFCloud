@@ -1,0 +1,9 @@
+{
+	"name": "ADFtutoriales",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "77b99237-c750-4fc4-998a-a76fe7c994c0",
+		"tenantId": "9e177e8d-e276-4922-ace9-f66627fbaee0"
+	}
+}
