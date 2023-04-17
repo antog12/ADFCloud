@@ -1,0 +1,84 @@
+{
+	"name": "Parquet2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "lnk_parquetDestino",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "output"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Platform",
+				"type": "UTF8"
+			},
+			{
+				"name": "Year_of_Release",
+				"type": "UTF8"
+			},
+			{
+				"name": "Genre",
+				"type": "UTF8"
+			},
+			{
+				"name": "Publisher",
+				"type": "UTF8"
+			},
+			{
+				"name": "NA_Sales",
+				"type": "UTF8"
+			},
+			{
+				"name": "EU_Sales",
+				"type": "UTF8"
+			},
+			{
+				"name": "JP_Sales",
+				"type": "UTF8"
+			},
+			{
+				"name": "Other_Sales",
+				"type": "UTF8"
+			},
+			{
+				"name": "Global_Sales",
+				"type": "UTF8"
+			},
+			{
+				"name": "Critic_Score",
+				"type": "UTF8"
+			},
+			{
+				"name": "Critic_Count",
+				"type": "UTF8"
+			},
+			{
+				"name": "User_Score",
+				"type": "UTF8"
+			},
+			{
+				"name": "User_Count",
+				"type": "UTF8"
+			},
+			{
+				"name": "Developer",
+				"type": "UTF8"
+			},
+			{
+				"name": "Rating",
+				"type": "UTF8"
+			}
+		]
+	}
+}

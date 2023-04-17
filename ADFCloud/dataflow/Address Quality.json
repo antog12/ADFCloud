@@ -1,0 +1,98 @@
+{
+	"name": "Address Quality",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "direccion",
+						"type": "DatasetReference"
+					},
+					"name": "origen"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Parquet2",
+						"type": "DatasetReference"
+					},
+					"name": "OutPuttoADLS"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Conditional"
+				},
+				{
+					"name": "FailedMetada"
+				},
+				{
+					"name": "DataQualityRules"
+				},
+				{
+					"name": "filterOutNullCountry"
+				},
+				{
+					"name": "CompleteAddress"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          AddressID as integer,",
+				"          AddressLine1 as string,",
+				"          AddressLine2 as string,",
+				"          City as string,",
+				"          StateProvince as string,",
+				"          CountryRegion as string,",
+				"          PostalCode as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> origen",
+				"origen split(iif(!in(columnNames(),'AddressID'),false(),\r",
+				"iif(!in(columnNames(),'AddressLine1'),false(),\r",
+				"iif(!in(columnNames(),'City'),false(),\r",
+				"iif(!in(columnNames(),'StateProvince'),false(),\r",
+				"iif(!in(columnNames(),'CountryRegion'),false(),\r",
+				"iif(!in(columnNames(),'PostalCode'),false(),true())))))),",
+				"     disjoint: false) ~> Conditional@(Pass, Fail)",
+				"Conditional@Fail assert(expectTrue(false(), false, 'failledMetadata', null, 'Not all columns present')) ~> FailedMetada",
+				"Conditional@Pass assert(expectTrue(CountryRegion == 'United States', false, 'assertUsOnly', null, CountryRegion + 'is not valid'),",
+				"     expectUnique(CountryRegion == 'United States', false, 'addressIdUnique', null, \"ID of {AddressID} is not unique\")) ~> DataQualityRules",
+				"DataQualityRules filter(!isNull(CountryRegion)) ~> filterOutNullCountry",
+				"filterOutNullCountry derive(MakeFullAddress = AddressLine1 +' '+ City +' '+ StateProvince +' '+ PostalCode) ~> CompleteAddress",
+				"CompleteAddress sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Name as string,",
+				"          Platform as string,",
+				"          Year_of_Release as string,",
+				"          Genre as string,",
+				"          Publisher as string,",
+				"          NA_Sales as string,",
+				"          EU_Sales as string,",
+				"          JP_Sales as string,",
+				"          Other_Sales as string,",
+				"          Global_Sales as string,",
+				"          Critic_Score as string,",
+				"          Critic_Count as string,",
+				"          User_Score as string,",
+				"          User_Count as string,",
+				"          Developer as string,",
+				"          Rating as string",
+				"     ),",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OutPuttoADLS"
+			]
+		}
+	}
+}
