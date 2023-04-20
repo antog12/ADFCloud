@@ -91,8 +91,7 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('roundRobin', 4)) ~> OutPuttoADLS"
+				"     skipDuplicateMapOutputs: true) ~> OutPuttoADLS"
 			]
 		}
 	}
