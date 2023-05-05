@@ -1,0 +1,21 @@
+{
+	"name": "CdD_productcsv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LnKGenerico_csv",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "output"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
