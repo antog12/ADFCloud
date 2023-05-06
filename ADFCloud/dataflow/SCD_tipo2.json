@@ -17,6 +17,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "ExistingProducts"
+				},
+				{
+					"name": "LooKupMaxKey"
 				}
 			],
 			"sinks": [],
@@ -44,7 +47,9 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     query: 'select ProductID,Name,ProductNumber,Color,StandardCost,ListPrice\\nfrom SalesLT.Product',",
-				"     format: 'query') ~> ExistingProducts"
+				"     format: 'query') ~> ExistingProducts",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> LooKupMaxKey"
 			]
 		}
 	}
