@@ -10,6 +10,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "NewProducts"
+				},
+				{
+					"dataset": {
+						"referenceName": "ADB_ProductExist",
+						"type": "DatasetReference"
+					},
+					"name": "ExistingProducts"
 				}
 			],
 			"sinks": [],
@@ -24,7 +31,20 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> NewProducts"
+				"     ignoreNoFilesFound: false) ~> NewProducts",
+				"source(output(",
+				"          ProductID as integer,",
+				"          Name as string,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          StandardCost as decimal(19,4),",
+				"          ListPrice as decimal(19,4)",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'select ProductID,Name,ProductNumber,Color,StandardCost,ListPrice\\nfrom SalesLT.Product',",
+				"     format: 'query') ~> ExistingProducts"
 			]
 		}
 	}
