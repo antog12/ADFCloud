@@ -1,0 +1,44 @@
+{
+	"name": "CdD_NewProducts",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LnKGenerico_csv",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Product.csv",
+				"fileSystem": "input"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "ProductNumber",
+				"type": "String"
+			},
+			{
+				"name": "Color",
+				"type": "String"
+			},
+			{
+				"name": "StandarCost",
+				"type": "String"
+			},
+			{
+				"name": "ListPrice",
+				"type": "String"
+			}
+		]
+	}
+}
