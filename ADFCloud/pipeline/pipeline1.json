@@ -1,0 +1,162 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ProductID",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductID",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							},
+							{
+								"source": {
+									"name": "Name",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Name",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "ProductNumber",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ProductNumber",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "Color",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Color",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "StandardCost",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "StandarCost",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 4,
+									"precision": 19
+								}
+							},
+							{
+								"source": {
+									"name": "ListPrice",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Listprice",
+									"type": "Decimal",
+									"physicalType": "decimal",
+									"scale": 4,
+									"precision": 19
+								}
+							},
+							{
+								"source": {
+									"name": "EffectiveDate",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EffectiveDate",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "Active",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Active",
+									"type": "Int32",
+									"physicalType": "int"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DelimitedText3",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable4",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
