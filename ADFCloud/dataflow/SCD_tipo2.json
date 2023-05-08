@@ -19,10 +19,18 @@
 					"name": "ExistingProducts"
 				},
 				{
+					"dataset": {
+						"referenceName": "CdD_DimPT",
+						"type": "DatasetReference"
+					},
 					"name": "LooKupMaxKey"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
 			"transformations": [],
 			"scriptLines": [
 				"source(output(",
@@ -48,8 +56,28 @@
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     query: 'select ProductID,Name,ProductNumber,Color,StandardCost,ListPrice\\nfrom SalesLT.Product',",
 				"     format: 'query') ~> ExistingProducts",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> LooKupMaxKey"
+				"source(output(",
+				"          ProductID as integer,",
+				"          Name as string,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          StandarCost as decimal(19,4),",
+				"          Listprice as decimal(19,4),",
+				"          EffectiveDate as timestamp,",
+				"          Active as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'select max (ProductID) as maxkey from dbo.DimProductsTable',",
+				"     format: 'query') ~> LooKupMaxKey",
+				"LooKupMaxKey sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1) ~> sink1"
 			]
 		}
 	}
