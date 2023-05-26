@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "flattenPeriods"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          body as ({@context} as string[], geometry as (coordinates as double[][][], type as string), properties as (elevation as (unitCode as string, value as double), forecastGenerator as string, generatedAt as string, periods as (detailedForecast as string, dewpoint as (unitCode as string, value as double), endTime as string, icon as string, isDaytime as boolean, name as string, number as short, probabilityOfPrecipitation as (unitCode as string, value as string), relativeHumidity as (unitCode as string, value as short), shortForecast as string, startTime as string, temperature as short, temperatureTrend as string, temperatureUnit as boolean, windDirection as string, windSpeed as string)[], units as string, updateTime as string, updated as string, validTimes as string), type as string),",
@@ -25,7 +29,35 @@
 				"     timeout: 30,",
 				"     requestInterval: 0,",
 				"     paginationRules: ['supportRFC5988' -> 'true'],",
-				"     responseFormat: ['type' -> 'json', 'documentForm' -> 'documentPerLine']) ~> weatherrestsource"
+				"     responseFormat: ['type' -> 'json', 'documentForm' -> 'documentPerLine']) ~> weatherrestsource",
+				"weatherrestsource foldDown(unroll(body.properties.periods),",
+				"     mapColumn(",
+				"          forecastGenerator = body.properties.forecastGenerator,",
+				"          generatedAt = body.properties.generatedAt,",
+				"          detailedForecast = body.properties.periods.detailedForecast,",
+				"          dewpoint = body.properties.periods.dewpoint,",
+				"          endTime = body.properties.periods.endTime,",
+				"          icon = body.properties.periods.icon,",
+				"          isDaytime = body.properties.periods.isDaytime,",
+				"          name = body.properties.periods.name,",
+				"          number = body.properties.periods.number,",
+				"          probabilityOfPrecipitation = body.properties.periods.probabilityOfPrecipitation,",
+				"          relativeHumidity = body.properties.periods.relativeHumidity,",
+				"          shortForecast = body.properties.periods.shortForecast,",
+				"          startTime = body.properties.periods.startTime,",
+				"          temperature = body.properties.periods.temperature,",
+				"          temperatureTrend = body.properties.periods.temperatureTrend,",
+				"          temperatureUnit = body.properties.periods.temperatureUnit,",
+				"          windDirection = body.properties.periods.windDirection,",
+				"          windSpeed = body.properties.periods.windSpeed,",
+				"          units = body.properties.units,",
+				"          updateTime = body.properties.updateTime,",
+				"          updated = body.properties.updated,",
+				"          validTimes = body.properties.validTimes,",
+				"          type = body.type",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flattenPeriods"
 			]
 		}
 	}
