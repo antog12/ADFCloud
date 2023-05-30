@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "flattenPeriods"
+				},
+				{
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -57,7 +60,10 @@
 				"          type = body.type",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: false) ~> flattenPeriods"
+				"     skipDuplicateMapOutputs: false) ~> flattenPeriods",
+				"flattenPeriods derive(forecast = @(name=name,",
+				"          shortForecast=shortForecast,",
+				"          temperature=temperature)) ~> derivedColumn1"
 			]
 		}
 	}
